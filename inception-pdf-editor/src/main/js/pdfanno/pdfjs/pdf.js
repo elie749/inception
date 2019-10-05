@@ -3408,11 +3408,11 @@ FontLoader.prototype = {
       // font after the desired fonts and then test for the loading of that
       // test font.
 
-      function int32(data, offset) {
-        return (data.charCodeAt(offset) << 24) |
-               (data.charCodeAt(offset + 1) << 16) |
-               (data.charCodeAt(offset + 2) << 8) |
-               (data.charCodeAt(offset + 3) & 0xff);
+      function int32(data1, offset) {
+        return (data1.charCodeAt(offset) << 24) |
+               (data1.charCodeAt(offset + 1) << 16) |
+               (data1.charCodeAt(offset + 2) << 8) |
+               (data1.charCodeAt(offset + 3) & 0xff);
       }
 
       function spliceString(s, offset, remove, insert) {
@@ -3654,15 +3654,15 @@ var Metadata = PDFJS.Metadata = (function MetadataClosure() {
   function fixMetadata(meta) {
     return meta.replace(/>\\376\\377([^<]+)/g, function(all, codes) {
       var bytes = codes.replace(/\\([0-3])([0-7])([0-7])/g,
-                                function(code, d1, d2, d3) {
+                                function(codeQ, d1, d2, d3) {
         return String.fromCharCode(d1 * 64 + d2 * 8 + d3 * 1);
       });
       var chars = '';
       for (var i = 0; i < bytes.length; i += 2) {
-        var code = bytes.charCodeAt(i) * 256 + bytes.charCodeAt(i + 1);
-        chars += code >= 32 && code < 127 && code !== 60 && code !== 62 &&
-          code !== 38 && false ? String.fromCharCode(code) :
-          '&#x' + (0x10000 + code).toString(16).substring(1) + ';';
+        var codeQ = bytes.charCodeAt(i) * 256 + bytes.charCodeAt(i + 1);
+        chars += codeQ >= 32 && codeQ < 127 && codeQ !== 60 && codeQ !== 62 &&
+          codeQ !== 38 && false ? String.fromCharCode(codeQ) :
+          '&#x' + (0x10000 + codeQ).toString(16).substring(1) + ';';
       }
       return '>' + chars;
     });
@@ -9220,7 +9220,7 @@ var PDFPageProxy = (function PDFPageProxyClosure() {
         }
       );
 
-      function complete(error) {
+      function complete(error5) {
         var i = intentState.renderTasks.indexOf(internalRenderTask);
         if (i >= 0) {
           intentState.renderTasks.splice(i, 1);
@@ -9231,7 +9231,7 @@ var PDFPageProxy = (function PDFPageProxyClosure() {
         }
         self._tryCleanup();
 
-        if (error) {
+        if (error5) {
           internalRenderTask.capability.reject(error);
         } else {
           internalRenderTask.capability.resolve();
@@ -9807,9 +9807,9 @@ var WorkerTransport = (function WorkerTransportClosure() {
 
             var font;
             if ('error' in exportedData) {
-              var error = exportedData.error;
-              warn('Error during font loading: ' + error);
-              this.commonObjs.resolve(id, error);
+              var error4 = exportedData.error;
+              warn('Error during font loading: ' + error4);
+              this.commonObjs.resolve(id, error4);
               break;
             } else {
               font = new FontFaceObject(exportedData);
@@ -9929,21 +9929,21 @@ var WorkerTransport = (function WorkerTransportClosure() {
             var tmpCanvas = createScratchCanvas(width, height);
             var tmpCtx = tmpCanvas.getContext('2d');
             tmpCtx.drawImage(img, 0, 0);
-            var data = tmpCtx.getImageData(0, 0, width, height).data;
+            var data2 = tmpCtx.getImageData(0, 0, width, height).data2;
             var i, j;
 
             if (components === 3) {
               for (i = 0, j = 0; i < rgbaLength; i += 4, j += 3) {
                 buf[j] = data[i];
-                buf[j + 1] = data[i + 1];
-                buf[j + 2] = data[i + 2];
+                buf[j + 1] = data2[i + 1];
+                buf[j + 2] = data2[i + 2];
               }
             } else if (components === 1) {
               for (i = 0, j = 0; i < rgbaLength; i += 4, j++) {
-                buf[j] = data[i];
+                buf[j] = data2[i];
               }
             }
-            resolve({ data: buf, width: width, height: height});
+            resolve({ data2: buf, width: width, height: height});
           };
           img.onerror = function () {
             reject(new Error('JpegDecode failed to load image'));

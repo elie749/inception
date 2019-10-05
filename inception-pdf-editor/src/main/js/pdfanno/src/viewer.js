@@ -284,10 +284,10 @@ function getVisibleElements(scrollEl, views, sortByVisibility) {
   var left = scrollEl.scrollLeft, right = left + scrollEl.clientWidth;
 
   function isElementBottomBelowViewTop(view) {
-    var element = view.div;
-    var elementBottom =
-      element.offsetTop + element.clientTop + element.clientHeight;
-    return elementBottom > top;
+    var element1 = view.div;
+    var element1Bottom =
+      element1.offsetTop + element1.clientTop + element1.clientHeight;
+    return element1Bottom > top;
   }
 
   var visible = [], view, element;
@@ -4253,10 +4253,10 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
         offset: undefined
       };
 
-      function beginText(begin, className) {
-        var divIdx = begin.divIdx;
+      function beginText(begin1, className) {
+        var divIdx = begin1.divIdx;
         textDivs[divIdx].textContent = '';
-        appendTextToDiv(divIdx, 0, begin.offset, className);
+        appendTextToDiv(divIdx, 0, begin1.offset, className);
       }
 
       function appendTextToDiv(divIdx, fromOffset, toOffset, className) {
